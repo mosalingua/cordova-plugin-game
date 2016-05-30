@@ -49,7 +49,7 @@
     	 self.gameCenterController.leaderboardTimeScope = GKLeaderboardTimeScopeWeek;
 
          CDVViewController *vc = (CDVViewController *)[super viewController];
-         [vc presentViewController:self.leaderboardController animated:YES completion: ^{
+         [vc presentViewController:self.gameCenterController animated:YES completion: ^{
          }];
 }
 
@@ -216,7 +216,7 @@
 		}
 		//no scores yet, put 0
         else if (scores==nil) {
-            CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"%lld", (long)0]];
+            CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"%ld", (long)0]];
             //[pr setKeepCallbackAsBool:YES];
             [self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
         }
@@ -264,7 +264,7 @@
         self.gameCenterController.leaderboardIdentifier = (NSString *) [command.arguments objectAtIndex:0];
        
         CDVViewController *vc = (CDVViewController *)[super viewController];
-        [vc presentViewController:self.leaderboardController animated:YES completion: ^{
+        [vc presentViewController:self.gameCenterController animated:YES completion: ^{
         }];
 }
 
@@ -350,7 +350,7 @@
         self.gameCenterController.viewState = GKGameCenterViewControllerStateAchievements;
         
         CDVViewController *vc = (CDVViewController *)[super viewController];
-        [vc presentViewController:self.achievementsController animated:YES completion: ^{
+        [vc presentViewController:self.gameCenterController animated:YES completion: ^{
         }];
 }
 
@@ -403,8 +403,7 @@
 } 
 
 - (void)dealloc {
-    self.leaderboardController = nil;
-    self.achievementsController = nil;
+    self.gameCenterController = nil;
     
     [super dealloc];
 }
