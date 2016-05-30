@@ -33,7 +33,7 @@
 #endif
 
 
-@interface Game : CDVPlugin <GKLeaderboardViewControllerDelegate,GKAchievementViewControllerDelegate>
+@interface Game : CDVPlugin <GKGameCenterControllerDelegate>
 
 - (void)setUp:(CDVInvokedUrlCommand *)command;
 - (void)login:(CDVInvokedUrlCommand *)command;

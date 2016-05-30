@@ -27,8 +27,7 @@
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
 @interface Game ()
-@property (nonatomic, retain) GKLeaderboardViewController *leaderboardController;
-@property (nonatomic, retain) GKAchievementViewController *achievementsController;
+ @property (nonatomic, retain) GKGameCenterViewController *gameCenterController;
 @end
 
 @implementation Game
@@ -39,16 +38,19 @@
 
 - (void)showAllLeaderboards:(CDVInvokedUrlCommand *)command {
 
- 	//[self.commandDelegate runInBackground:^{
-         if ( self.leaderboardController == nil ) {
-             self.leaderboardController = [[GKLeaderboardViewController alloc] init];
-             self.leaderboardController.leaderboardDelegate = self;//
-         }
-         self.leaderboardController.category = nil;
+         if ( self.gameCenterController == nil ) {
+        	self.gameCenterController = [[GKGameCenterViewController alloc] init];
+        	self.gameCenterController.gameCenterDelegate = self;//
+    	 }
+    	 self.gameCenterController.leaderboardIdentifier = nil;
+    	 //show leaderboards ui by default
+    	 self.gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
+    	 //weekly view
+    	 self.gameCenterController.leaderboardTimeScope = GKLeaderboardTimeScopeWeek;
+
          CDVViewController *vc = (CDVViewController *)[super viewController];
          [vc presentViewController:self.leaderboardController animated:YES completion: ^{
          }];
-    // }];
 }
 
 - (void)login:(CDVInvokedUrlCommand *)command {
@@ -255,16 +257,15 @@
 }
 
 - (void)showLeaderboard:(CDVInvokedUrlCommand *)command {
-    //[self.commandDelegate runInBackground:^{//cranberrygame
-        if ( self.leaderboardController == nil ) {
-            self.leaderboardController = [[GKLeaderboardViewController alloc] init];
-            self.leaderboardController.leaderboardDelegate = self;//
+		if ( self.gameCenterController == nil ) {
+            self.gameCenterController = [[GKGameCenterViewController alloc] init];
+            self.gameCenterController.gameCenterDelegate = self;//
         }
-        self.leaderboardController.category = (NSString *) [command.arguments objectAtIndex:0];
+        self.gameCenterController.leaderboardIdentifier = (NSString *) [command.arguments objectAtIndex:0];
+       
         CDVViewController *vc = (CDVViewController *)[super viewController];
         [vc presentViewController:self.leaderboardController animated:YES completion: ^{
         }];
-    //}];//cranberrygame
 }
 
 - (void)unlockAchievement:(CDVInvokedUrlCommand *)command {
@@ -339,16 +340,18 @@
     //}];//cranberrygame
 }
 
-- (void)showAchievements:(CDVInvokedUrlCommand *)command {//cranberrygame
-    //[self.commandDelegate runInBackground:^{
-        if ( self.achievementsController == nil ) {
-            self.achievementsController = [[GKAchievementViewController alloc] init];
-            self.achievementsController.achievementDelegate = self;//
+- (void)showAchievements:(CDVInvokedUrlCommand *)command {
+
+		if ( self.gameCenterController == nil ) {
+            self.gameCenterController = [[GKGameCenterViewController alloc] init];
+            self.gameCenterController.gameCenterDelegate = self;//
         }
+    
+        self.gameCenterController.viewState = GKGameCenterViewControllerStateAchievements;
+        
         CDVViewController *vc = (CDVViewController *)[super viewController];
         [vc presentViewController:self.achievementsController animated:YES completion: ^{
         }];
-    //}];//cranberrygame
 }
 
 - (void) resetAchievements:(CDVInvokedUrlCommand*)command;
@@ -376,22 +379,28 @@
 }
 
 //GKLeaderboardViewControllerDelegate
-- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController {
+//- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController {
 /*
     CDVViewController *vc = (CDVViewController *)[super viewController];
     [vc dismissViewControllerAnimated:YES completion:nil];
 */
-	[viewController dismissViewControllerAnimated:YES completion:nil];
-}
+//	[viewController dismissViewControllerAnimated:YES completion:nil];
+//}
 
 //GKAchievementViewControllerDelegate
-- (void)achievementViewControllerDidFinish:(GKAchievementViewController *)viewController {
+//- (void)achievementViewControllerDidFinish:(GKAchievementViewController *)viewController {
 /*
     CDVViewController* vc = (CDVViewController *)[super viewController];
     [vc dismissViewControllerAnimated:YES completion:nil];
 */
-    [viewController dismissViewControllerAnimated:YES completion:nil];
-}
+//    [viewController dismissViewControllerAnimated:YES completion:nil];
+//}
+
+#pragma GKGameCenterControllerDelegate
+-(void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController
+{
+    [gameCenterViewController dismissViewControllerAnimated:YES completion:nil];
+} 
 
 - (void)dealloc {
     self.leaderboardController = nil;
