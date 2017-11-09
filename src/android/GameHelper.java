@@ -314,7 +314,9 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         if (mSetupDone) {
             String error = "GameHelper: you cannot call GameHelper.setup() more than once!";
             logError(error);
-            throw new IllegalStateException(error);
+            //throw new IllegalStateException(error);
+            //DO NOT CRASH just because we called this twice!!
+            return;
         }
         mListener = listener;
         debugLog("Setup: requested clients: " + mRequestedClients);
