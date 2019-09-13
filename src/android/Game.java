@@ -572,7 +572,12 @@ public class Game extends CordovaPlugin implements GameHelper.GameHelperListener
 		//https://developer.android.com/reference/com/google/android/gms/games/leaderboard/Leaderboards.html#loadCurrentPlayerLeaderboardScore(com.google.android.gms.common.api.GoogleApiClient, java.lang.String, int, int)
 		//https://developer.android.com/reference/com/google/android/gms/games/leaderboard/LeaderboardVariant.html#TIME_SPAN_DAILY
 		//http://stackoverflow.com/questions/23248157/how-to-get-score-from-google-play-game-services-leaderboard-of-current-player
-		Games.Leaderboards.loadCurrentPlayerLeaderboardScore(getGameHelper().getApiClient(), leaderboardId, LeaderboardVariant.TIME_SPAN_ALL_TIME, LeaderboardVariant.COLLECTION_PUBLIC).setResultCallback(new ResultCallbackSubmitScoreResult());
+		try {
+			Games.Leaderboards.loadCurrentPlayerLeaderboardScore(getGameHelper().getApiClient(), leaderboardId, LeaderboardVariant.TIME_SPAN_ALL_TIME, LeaderboardVariant.COLLECTION_PUBLIC).setResultCallback(new ResultCallbackSubmitScoreResult());
+		}
+		catch(SecurityException ex) {
+			//silent
+		}
 	}
 	
 	private void _submitScore(String leaderboardId, int score){
@@ -612,7 +617,12 @@ public class Game extends CordovaPlugin implements GameHelper.GameHelperListener
 				}
             }
         }
-		Games.Leaderboards.submitScoreImmediate(getGameHelper().getApiClient(), leaderboardId, score).setResultCallback(new ResultCallbackSubmitScoreResult());
+        try {
+			Games.Leaderboards.submitScoreImmediate(getGameHelper().getApiClient(), leaderboardId, score).setResultCallback(new ResultCallbackSubmitScoreResult());
+		}
+		catch(SecurityException ex) {
+			//silent
+		}
 //*/
 	}	
 	
@@ -621,12 +631,22 @@ public class Game extends CordovaPlugin implements GameHelper.GameHelperListener
 		//this.cordova.getActivity().startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(getGameHelper().getApiClient()), 0);
 		//this.cordova.getActivity().startActivityFor(Games.Leaderboards.getAllLeaderboardsIntent(getGameHelper().getApiClient()));		
 		//show a specific leaderboard
-		this.cordova.getActivity().startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGameHelper().getApiClient(), leaderboardId), 0);		
+		try {
+			this.cordova.getActivity().startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGameHelper().getApiClient(), leaderboardId), 0);
+		}
+		catch(SecurityException ex) {
+			//silent
+		}		
 	}
 
 	private void _showAllLeaderboards(){
     	//show all leaderboards
-    	this.cordova.getActivity().startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(getGameHelper().getApiClient()), 0);
+    	try {
+    		this.cordova.getActivity().startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(getGameHelper().getApiClient()), 0);
+    	}
+		catch(SecurityException ex) {
+			//silent
+		}
     	//this.cordova.getActivity().startActivityFor(Games.Leaderboards.getAllLeaderboardsIntent(getGameHelper().getApiClient()));
     }
 
@@ -677,7 +697,12 @@ public class Game extends CordovaPlugin implements GameHelper.GameHelperListener
 				}
             }
         }		
-		Games.Achievements.unlockImmediate(getGameHelper().getApiClient(), achievementId).setResultCallback(new ResultCallbackUpdateAchievementResult());
+        try {
+			Games.Achievements.unlockImmediate(getGameHelper().getApiClient(), achievementId).setResultCallback(new ResultCallbackUpdateAchievementResult());
+		}
+		catch(SecurityException ex) {
+			//silent
+		}
 //*/		
 	}
 	
@@ -729,12 +754,22 @@ public class Game extends CordovaPlugin implements GameHelper.GameHelperListener
 				}
             }
         }		
-		Games.Achievements.incrementImmediate(getGameHelper().getApiClient(), achievementId, stepsOrPercent).setResultCallback(new ResultCallbackUpdateAchievementResult());
+		try {
+			Games.Achievements.incrementImmediate(getGameHelper().getApiClient(), achievementId, stepsOrPercent).setResultCallback(new ResultCallbackUpdateAchievementResult());
+		}
+		catch(SecurityException ex) {
+			//silent
+		}
 //*/		
 	}
 	
 	private void _showAchievements(){
-		this.cordova.getActivity().startActivityForResult(Games.Achievements.getAchievementsIntent(getGameHelper().getApiClient()), 0);		
+		try {
+			this.cordova.getActivity().startActivityForResult(Games.Achievements.getAchievementsIntent(getGameHelper().getApiClient()), 0);		
+		}
+		catch(SecurityException ex) {
+			//silent
+		}
 	}
 
 	private void _resetAchievements(){///////////////todo
